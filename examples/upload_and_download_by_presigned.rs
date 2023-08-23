@@ -9,10 +9,11 @@ const SECRET_KEY: &str = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
 const REGION: &str = "us-east-1";
 const ENDPOINT: &str = "s3.amazonaws.com";
 const BUCKET: &str = "examplebucket";
+const TOKEN: Option<String> = None;
 
 #[tokio::main]
 async fn main() {
-    let s3 = S3::new(BUCKET, REGION, ENDPOINT, ACCESS_KEY, SECRET_KEY);
+    let s3 = S3::new(BUCKET, REGION, ENDPOINT, ACCESS_KEY, SECRET_KEY, TOKEN);
 
     let key = String::from("text.txt");
     let content = "Hello world";

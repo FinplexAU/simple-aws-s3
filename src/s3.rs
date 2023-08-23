@@ -26,6 +26,7 @@ pub struct PostPresignedInfo {
 /// const REGION: &str = "us-east-1";
 /// const ENDPOINT: &str = "s3.amazonaws.com";
 /// const BUCKET: &str = "examplebucket";
+/// const TOKEN: Option<String> = None;
 ///
 /// let s3 = S3::new(
 ///     BUCKET,
@@ -33,6 +34,7 @@ pub struct PostPresignedInfo {
 ///     ENDPOINT,
 ///     ACCESS_KEY,
 ///     SECRET_KEY,
+///     TOKEN,
 /// );
 ///
 /// let res = s3.generate_presigned_post("example.png".into(), "image/png", 10485760, Duration::seconds(3600), None).unwrap();
