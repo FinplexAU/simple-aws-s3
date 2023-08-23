@@ -61,6 +61,7 @@ pub struct S3 {
     endpoint: String,
     access_key: String,
     secret_key: String,
+    token: Option<String>,
 }
 
 impl S3 {
@@ -71,12 +72,14 @@ impl S3 {
         endpoint: impl Into<String>,
         access_key: impl Into<String>,
         secret_key: impl Into<String>,
+        token: impl Into<Option<String>>,
     ) -> Self {
         let bucket = bucket.into();
         let region = region.into();
         let endpoint = endpoint.into();
         let access_key = access_key.into();
         let secret_key = secret_key.into();
+        let token = token.into();
 
         Self {
             client: Client::new(),
@@ -85,6 +88,7 @@ impl S3 {
             endpoint,
             access_key,
             secret_key,
+            token,
         }
     }
 
@@ -163,6 +167,9 @@ impl S3 {
         fields.insert(S3_ALGO_KEY.into(), S3_ALGO_VALUE.into());
         fields.insert(S3_CRED_KEY.into(), credential);
         fields.insert(S3_DATE_KEY.into(), formatted_row);
+        if let Some(token) = self.token.clone() {
+            fields.insert(S3_TOKEN_KEY.into(), token);
+        }
         if let Some(acl) = acl {
             fields.insert("acl".into(), acl.into());
         }
