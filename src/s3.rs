@@ -210,6 +210,10 @@ impl S3 {
             .append_pair(S3_EXPIRES_KEY, &expires_on.to_string())
             .append_pair(S3_SIGNED_HEADERS_KEY, "host");
 
+        if let Some(token) = &self.token {
+            url.query_pairs_mut().append_pair(S3_TOKEN_KEY, token);
+        }
+
         let host = url.host().unwrap().to_string();
         let mut req = Request::new(Method::GET, url);
         req.headers_mut().insert("host", (&host).parse().unwrap());
