@@ -191,7 +191,7 @@ impl S3 {
     }
 
     #[inline]
-    pub fn generate_presigned_get(&self, key: &str, expires_on: i32) -> Result<String, Error> {
+    pub fn generate_presigned_get(&self, key: &str, expires_in: Duration) -> Result<String, Error> {
         let now = Utc::now();
         let formatted_now = now.format("%Y%m%dT%H%M%SZ").to_string();
 
@@ -207,7 +207,7 @@ impl S3 {
             .append_pair(S3_ALGO_KEY, S3_ALGO_VALUE)
             .append_pair(S3_CRED_KEY, &self.credential(now))
             .append_pair(S3_DATE_KEY, &formatted_now)
-            .append_pair(S3_EXPIRES_KEY, &expires_on.to_string())
+            .append_pair(S3_EXPIRES_KEY, &expires_in.num_seconds().to_string())
             .append_pair(S3_SIGNED_HEADERS_KEY, "host");
 
         if let Some(token) = &self.token {
