@@ -202,17 +202,19 @@ impl S3 {
             key = key,
         ))
         .unwrap();
+
+        url.query_pairs_mut().clear();
+
+        if let Some(token) = &self.token {
+            url.query_pairs_mut().append_pair(S3_TOKEN_KEY, token);
+        }
+
         url.query_pairs_mut()
-            .clear()
             .append_pair(S3_ALGO_KEY, S3_ALGO_VALUE)
             .append_pair(S3_CRED_KEY, &self.credential(now))
             .append_pair(S3_DATE_KEY, &formatted_now)
             .append_pair(S3_EXPIRES_KEY, &expires_in.num_seconds().to_string())
             .append_pair(S3_SIGNED_HEADERS_KEY, "host");
-
-        if let Some(token) = &self.token {
-            url.query_pairs_mut().append_pair(S3_TOKEN_KEY, token);
-        }
 
         let host = url.host().unwrap().to_string();
         let mut req = Request::new(Method::GET, url);
